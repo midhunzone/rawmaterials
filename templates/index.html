@@ -18,47 +18,65 @@
 <body>
     <div class="container">
         <h2 class="text-center">Raw Material Cost Calculator</h2>
-        <form action="/calculate" method="POST">
+        <form action="/calculate" method="post">
             <div class="form-group">
-                <label for="num_tires">Number of Tires:</label>
-                <input type="number" class="form-control" id="num_tires" name="num_tires" required>
+                <label for="number_of_tires">Number of Tires:</label>
+                <input type="number" class="form-control" id="number_of_tires" name="number_of_tires" value="{{ values['number_of_tires'] }}" required>
             </div>
             <div class="form-group">
                 <label for="tread_rubber_cost_per_kg">Tread Rubber Cost per Kg (Rs):</label>
-                <input type="number" class="form-control" id="tread_rubber_cost_per_kg" name="tread_rubber_cost_per_kg" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="tread_rubber_cost_per_kg" name="tread_rubber_cost_per_kg" value="{{ values['tread_rubber_cost_per_kg'] }}" required>
             </div>
             <div class="form-group">
                 <label for="tread_rubber_weight_per_tire">Tread Rubber Weight per Tire (Kg):</label>
-                <input type="number" class="form-control" id="tread_rubber_weight_per_tire" name="tread_rubber_weight_per_tire" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="tread_rubber_weight_per_tire" name="tread_rubber_weight_per_tire" value="{{ values['tread_rubber_weight_per_tire'] }}" required>
             </div>
             <div class="form-group">
                 <label for="bonding_gum_cost_per_kg">Bonding Gum Cost per Kg (Rs):</label>
-                <input type="number" class="form-control" id="bonding_gum_cost_per_kg" name="bonding_gum_cost_per_kg" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="bonding_gum_cost_per_kg" name="bonding_gum_cost_per_kg" value="{{ values['bonding_gum_cost_per_kg'] }}" required>
             </div>
             <div class="form-group">
                 <label for="bonding_gum_weight_per_tire">Bonding Gum Weight per Tire (Kg):</label>
-                <input type="number" class="form-control" id="bonding_gum_weight_per_tire" name="bonding_gum_weight_per_tire" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="bonding_gum_weight_per_tire" name="bonding_gum_weight_per_tire" value="{{ values['bonding_gum_weight_per_tire'] }}" required>
             </div>
             <div class="form-group">
                 <label for="patches_cost_per_unit">Patches Cost per Unit (Rs):</label>
-                <input type="number" class="form-control" id="patches_cost_per_unit" name="patches_cost_per_unit" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="patches_cost_per_unit" name="patches_cost_per_unit" value="{{ values['patches_cost_per_unit'] }}" required>
             </div>
             <div class="form-group">
                 <label for="envelopes_cost_per_unit">Envelopes Cost per Unit (Rs):</label>
-                <input type="number" class="form-control" id="envelopes_cost_per_unit" name="envelopes_cost_per_unit" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="envelopes_cost_per_unit" name="envelopes_cost_per_unit" value="{{ values['envelopes_cost_per_unit'] }}" required>
             </div>
             <div class="form-group">
                 <label for="other_consumables_cost_per_tire">Other Consumables Cost per Tire (Rs):</label>
-                <input type="number" class="form-control" id="other_consumables_cost_per_tire" name="other_consumables_cost_per_tire" step="0.01" required>
+                <input type="number" step="0.01" class="form-control" id="other_consumables_cost_per_tire" name="other_consumables_cost_per_tire" value="{{ values['other_consumables_cost_per_tire'] }}" required>
             </div>
             <button type="submit" class="btn btn-primary">Calculate</button>
         </form>
-        <br>
-        {% if total_raw_material_cost %}
-        <div>
+        {% if total_raw_material_cost_per_tire and total_raw_material_cost %}
+            <br>
             <h4>Total Raw Material Cost per Tire: Rs {{ "{:,.2f}".format(total_raw_material_cost_per_tire) }}</h4>
             <h4>Total Raw Material Cost: Rs {{ "{:,.2f}".format(total_raw_material_cost) }}</h4>
-        </div>
+            <br>
+            <h5>Component Costs:</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Unit Cost (Rs)</th>
+                        <th>Total Cost (Rs)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in component_costs %}
+                        <tr>
+                            <td>{{ item.component }}</td>
+                            <td>{{ "{:,.2f}".format(item.unit_cost) }}</td>
+                            <td>{{ "{:,.2f}".format(item.total_cost) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% endif %}
     </div>
 </body>
